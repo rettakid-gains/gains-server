@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <context:component-scan base-package="za.co.rettakid.gains.presentation"/>
+    <context:annotation-config/>
+    <mvc:annotation-driven/>
+
+    <!--Security-->
+    <security:http auto-config="true" use-expressions="true">
+
+        <security:intercept-url pattern="/login/**" access="permitAll()"/>
+        <security:intercept-url pattern="/register/**" access="permitAll()"/>
+        <security:intercept-url pattern="/error/**" access="permitAll()"/>
+        <security:intercept-url pattern="/res/**" access="permitAll()"/>
+        <security:intercept-url pattern="/" access="permitAll()"/>
+        <security:intercept-url pattern="/**" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/error/*" access="permitAll()"/>
+
+        <security:form-login login-page="/login"/>
+        <security:access-denied-handler error-page="/error/403"/>
+        <security:csrf disabled="true"/>
+    </security:http>
+    <security:authentication-manager/>
+
+    <mvc:resources mapping="/res/**" location="/res/"/>
+
+    <!--Tiles-->
+    <bean id="tiles3ViewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
+        <property name="order" value="0"/>
+    </bean>
+    <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles-definitions.xml</value>
+            </list>
+        </property>
+    </bean>
+    <!--View Resolver-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/tiles/"/>
+        <property name="suffix" value=".jsp"/>
+        <property name="order" value="2"/>
+    </bean>
+    <bean id="urlBasedViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
+    </bean>
+
+    <!--validators-->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="basename" value="validation-messages.validation_messages"/>
+    </bean>
+
+    <import resource="classpath:service-config.xml"/>
+
+</beans>

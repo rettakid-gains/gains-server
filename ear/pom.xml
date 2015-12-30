@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>za.co.rettakid.gains</groupId>
+        <artifactId>gains-server</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ear</artifactId>
+    <name>ear</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>za.co.rettakid.gains</groupId>
+            <artifactId>web-presentation</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>za.co.rettakid.gains</groupId>
+            <artifactId>web-rest</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <version>6</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                    <modules>
+                        <webModule>
+                            <groupId>za.co.rettakid.gains</groupId>
+                            <artifactId>web-presentation</artifactId>
+                            <contextRoot>/presentation</contextRoot>
+                        </webModule>
+                        <webModule>
+                            <groupId>za.co.rettakid.gains</groupId>
+                            <artifactId>web-rest</artifactId>
+                            <contextRoot>/rest</contextRoot>
+                        </webModule>
+                    </modules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
